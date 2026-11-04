@@ -44,9 +44,8 @@ async function loadMahasiswa(keyword = '') {
 
         //Percobaan 6-1 Langkah 4 kirim request
         const response = await fetch(url);
-            if (!response.ok) throw new Error(`HTTP error! status: 
-                ${response.status}`);
-            }
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
         //Percobaan 6-1 Langkah 4 kirim ekstrak json 
         const result = await response.json();
         if (result.status === 'success' ){
@@ -54,7 +53,10 @@ async function loadMahasiswa(keyword = '') {
         } else {
             showAlert(result.message, 'danger');
         }
+    } catch (error) {
+        showAlert(`Terjadi kesalahan koneksi: ${error.message}`, 'danger');
     }
+}
 
 // 3. Render Baris Tabel Dinamis ke DOM
 function renderTable(mahasiswaList = [], keyword = '') {
@@ -167,12 +169,9 @@ if (formEdit) {
                 body: JSON.stringify(payload)
             });
             const data = await res.json();
+            // Percobaan 6-3 Langkah 6
             if (res.ok && data.status === 'success') {
-                closeEditModal();
-                loadMahasiswa();
-            }
-             // Percobaan 6-3 Langkah 6   
-            showAlert(data.message, 'success'); {
+                showAlert(data.message || 'Data berhasil diperbarui', 'success');
                 closeEditModal();
                 loadMahasiswa();
             } else {
